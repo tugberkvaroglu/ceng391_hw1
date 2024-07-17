@@ -1,0 +1,3 @@
+/home/tugberk/Desktop/ceng391_hw1/build/CMakeFiles/image_test.dir
+/home/tugberk/Desktop/ceng391_hw1/build/CMakeFiles/edit_cache.dir
+/home/tugberk/Desktop/ceng391_hw1/build/CMakeFiles/rebuild_cache.dir

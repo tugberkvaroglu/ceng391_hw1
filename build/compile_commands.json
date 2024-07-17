@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/home/tugberk/Desktop/ceng391_hw1/build",
+  "command": "/usr/bin/c++  -I/home/tugberk/Desktop/ceng391_hw1/include  -o CMakeFiles/image_test.dir/app/image_test.cpp.o -c /home/tugberk/Desktop/ceng391_hw1/app/image_test.cpp",
+  "file": "/home/tugberk/Desktop/ceng391_hw1/app/image_test.cpp"
+},
+{
+  "directory": "/home/tugberk/Desktop/ceng391_hw1/build",
+  "command": "/usr/bin/c++  -I/home/tugberk/Desktop/ceng391_hw1/include  -o CMakeFiles/image_test.dir/src/image.cpp.o -c /home/tugberk/Desktop/ceng391_hw1/src/image.cpp",
+  "file": "/home/tugberk/Desktop/ceng391_hw1/src/image.cpp"
+}
+]
