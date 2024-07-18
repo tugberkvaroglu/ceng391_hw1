@@ -252,8 +252,136 @@ void Image::read_pnm(const std::string& filename)
             }
         }
     }
-
     fin.close();
+}
+
+void Image::to_rgb() {
+    if (m_n_channels == 3)
+        return; // Already in RGB format
+
+    if (m_n_channels != 1 && m_n_channels != 4) {
+        throw runtime_error("Error: Conversion to RGB only supported from grayscale or RGBA");
+    }
+
+    int new_n_channels = 3;
+    int new_step = m_width * new_n_channels;
+    size_t new_data_size;
+    if (!safe_multiply(new_step, m_height, new_data_size)) {
+        throw runtime_error("Error: Memory allocation size overflow!");
+    }
+
+    uchar *new_data = new (nothrow) uchar[new_data_size];
+    if (!new_data) {
+        throw runtime_error("Error: Memory allocation failed!");
+    }
+
+    for (int y = 0; y < m_height; ++y) {
+        for (int x = 0; x < m_width; ++x) {
+            if (m_n_channels == 1) {
+                uchar gray_value = m_data[y * m_step + x];
+                new_data[y * new_step + x * 3 + 0] = gray_value;
+                new_data[y * new_step + x * 3 + 1] = gray_value;
+                new_data[y * new_step + x * 3 + 2] = gray_value;
+            } else if (m_n_channels == 4) {
+                new_data[y * new_step + x * 3 + 0] = m_data[y * m_step + x * 4 + 0];
+                new_data[y * new_step + x * 3 + 1] = m_data[y * m_step + x * 4 + 1];
+                new_data[y * new_step + x * 3 + 2] = m_data[y * m_step + x * 4 + 2];
+            }
+        }
+    }
+
+    delete[] m_data;
+    m_data = new_data;
+    m_n_channels = new_n_channels;
+    m_step = new_step;
+}
+
+void Image::to_grayscale() {
+    if (m_n_channels == 1)
+        return; // Already in grayscale format
+
+    if (m_n_channels != 3 && m_n_channels != 4) {
+        throw runtime_error("Error: Conversion to grayscale only supported from RGB or RGBA");
+    }
+
+    int new_n_channels = 1;
+    int new_step = m_width * new_n_channels;
+    size_t new_data_size;
+    if (!safe_multiply(new_step, m_height, new_data_size)) {
+        throw runtime_error("Error: Memory allocation size overflow!");
+    }
+
+    uchar *new_data = new (nothrow) uchar[new_data_size];
+    if (!new_data) {
+        throw runtime_error("Error: Memory allocation failed!");
+    }
+
+    for (int y = 0; y < m_height; ++y) {
+        for (int x = 0; x < m_width; ++x) {
+            uchar r, g, b;
+            if (m_n_channels == 3) {
+                r = m_data[y * m_step + x * 3 + 0];
+                g = m_data[y * m_step + x * 3 + 1];
+                b = m_data[y * m_step + x * 3 + 2];
+            } else if (m_n_channels == 4) {
+                r = m_data[y * m_step + x * 4 + 0];
+                g = m_data[y * m_step + x * 4 + 1];
+                b = m_data[y * m_step + x * 4 + 2];
+            }
+            int gray_value = static_cast<int>(r * 0.3 + g * 0.59 + b * 0.11);
+            if (gray_value > 255) gray_value = 255;
+            if (gray_value < 0) gray_value = 0;
+            new_data[y * new_step + x] = static_cast<uchar>(gray_value);
+        }
+    }
+
+    delete[] m_data;
+    m_data = new_data;
+    m_n_channels = new_n_channels;
+    m_step = new_step;
+}
+
+void Image::to_rgba() {
+    if (m_n_channels == 4)
+        return; // Already in RGBA format
+
+    if (m_n_channels != 1 && m_n_channels != 3) {
+        throw runtime_error("Error: Conversion to RGBA only supported from grayscale or RGB");
+    }
+
+    int new_n_channels = 4;
+    int new_step = m_width * new_n_channels;
+    size_t new_data_size;
+    if (!safe_multiply(new_step, m_height, new_data_size)) {
+        throw runtime_error("Error: Memory allocation size overflow!");
+    }
+
+    uchar *new_data = new (nothrow) uchar[new_data_size];
+    if (!new_data) {
+        throw runtime_error("Error: Memory allocation failed!");
+    }
+
+    for (int y = 0; y < m_height; ++y) {
+        for (int x = 0; x < m_width; ++x) {
+            if (m_n_channels == 1) {
+                uchar gray_value = m_data[y * m_step + x];
+                new_data[y * new_step + x * 4 + 0] = gray_value;
+                new_data[y * new_step + x * 4 + 1] = gray_value;
+                new_data[y * new_step + x * 4 + 2] = gray_value;
+                new_data[y * new_step + x * 4 + 3] = 255;
+            } else if (m_n_channels == 3) {
+                new_data[y * new_step + x * 4 + 0] = m_data[y * m_step + x * 3 + 0];
+                new_data[y * new_step + x * 4 + 1] = m_data[y * m_step + x * 3 + 1];
+                new_data[y * new_step + x * 4 + 2] = m_data[y * m_step + x * 3 + 2];
+                new_data[y * new_step + x * 4 + 3] = 255;
+            }
+        }
+    }
+
+    delete[] m_data;
+    m_data = new_data;
+    m_n_channels = new_n_channels;
+    m_step = new_step;
 }
 
 }

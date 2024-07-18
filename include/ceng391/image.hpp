@@ -30,6 +30,10 @@ public:
     void write_pnm(const std::string& filename) const;
     void read_pnm(const std::string& filename);
 
+    void to_rgb();
+    void to_grayscale();
+    void to_rgba();
+
 private:
     int m_n_channels;
     int m_width;
