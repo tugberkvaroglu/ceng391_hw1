@@ -54,6 +54,39 @@ int main(int /*argc*/, char** /*argv*/)
         cout << "Read RGBA image of size (" << img_rgba.w() << "x" << img_rgba.h() << ")!" << endl;
         img_rgba.write_pnm("read_test_img_rgba");
 
+
+        // Test for converting to grayscale
+        cout << "Reading RGB image for grayscale conversion..." << endl;
+        Image img_rgb_to_gray(1, 1);  // Temporary dimensions
+        img_rgb.read_pnm("test_img_rgb.ppm");
+        cout << "Read RGB image of size (" << img_rgb.w() << "x" << img_rgb.h() << ")!" << endl;
+        img_rgb.to_grayscale();
+        img_rgb.write_pnm("converted_to_grayscale_from_rgb");
+
+        // Test for converting to grayscale
+        cout << "Reading RGB image for grayscale conversion..." << endl;
+        Image img_rgba_to_gray(1, 1);  // Temporary dimensions
+        img_rgb.read_pnm("test_img_rgba.ppm");
+        cout << "Read RGB image of size (" << img_rgb.w() << "x" << img_rgb.h() << ")!" << endl;
+        img_rgb.to_grayscale();
+        img_rgb.write_pnm("converted_to_grayscale_from_rgba");
+
+        // Test for converting to RGBA
+        cout << "Reading grayscale image for RGBA conversion..." << endl;
+        Image img_gray_to_rga(1, 1);  // Temporary dimensions
+        img_gray.read_pnm("test_img_gray.ppm");
+        cout << "Read grayscale image of size (" << img_gray.w() << "x" << img_gray.h() << ")!" << endl;
+        img_gray.to_rgba();
+        img_gray.write_pnm("converted_to_rgba");
+
+        // Test for converting to RGB
+        cout << "Reading RGBA image for RGB conversion..." << endl;
+        Image img_rgba_to_rgb(1, 1);  // Temporary dimensions
+        img_rgba.read_pnm("test_img_rgba.ppm");
+        cout << "Read RGBA image of size (" << img_rgba.w() << "x" << img_rgba.h() << ")!" << endl;
+        img_rgba.to_rgb();
+        img_rgba.write_pnm("converted_to_rgb");
+
     } catch (const std::exception& ex) {
         cerr << "Exception caught: " << ex.what() << endl;
         return EXIT_FAILURE;
