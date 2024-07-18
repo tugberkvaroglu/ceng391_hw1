@@ -33,6 +33,27 @@ int main(int /*argc*/, char** /*argv*/)
         img_rgba.set_rect_rgba(150, 150, 50, 50, 255, 255, 0, 128);
         img_rgba.write_pnm("test_img_rgba");
 
+     // Test for reading a grayscale image
+        cout << "Reading grayscale image..." << endl;
+        Image img_gray_read(1, 1);  // Temporary dimensions
+        img_gray.read_pnm("test_img_gray.ppm");
+        cout << "Read grayscale image of size (" << img_gray.w() << "x" << img_gray.h() << ")!" << endl;
+        img_gray.write_pnm("read_test_img_gray");
+
+        // Test for reading a RGB image
+        cout << "Reading RGB image..." << endl;
+        Image img_rgb_read(1, 1);  // Temporary dimensions
+        img_rgb.read_pnm("test_img_rgb.ppm");
+        cout << "Read RGB image of size (" << img_rgb.w() << "x" << img_rgb.h() << ")!" << endl;
+        img_rgb.write_pnm("read_test_img_rgb");
+
+        // Test for reading an RGBA image
+        cout << "Reading RGBA image..." << endl;
+        Image img_rgba_read(1, 1);  // Temporary dimensions
+        img_rgba.read_pnm("test_img_rgba.ppm");
+        cout << "Read RGBA image of size (" << img_rgba.w() << "x" << img_rgba.h() << ")!" << endl;
+        img_rgba.write_pnm("read_test_img_rgba");
+
     } catch (const std::exception& ex) {
         cerr << "Exception caught: " << ex.what() << endl;
         return EXIT_FAILURE;
