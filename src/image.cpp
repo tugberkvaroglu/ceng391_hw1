@@ -5,6 +5,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <limits>
+#include <vector>
 
 using namespace std;
 
@@ -179,6 +180,80 @@ void Image::write_pnm(const std::string& filename) const
     }
 
     fout.close();
+}
+
+void Image::read_pnm(const std::string& filename)
+{
+    ifstream fin(filename.c_str(), ios::in | ios::binary);
+    if (!fin.is_open()) {
+        throw runtime_error("Error: Unable to open file " + filename);
+    }
+
+    string magic_number;
+    fin >> magic_number;
+
+    if (magic_number != "P5" && magic_number != "P6") {
+        throw runtime_error("Error: Unsupported PNM format " + magic_number);
+    }
+
+    int width, height, max_val;
+    fin >> width >> height >> max_val;
+
+    if (max_val != 255) {
+        throw runtime_error("Error: Unsupported max value " + to_string(max_val));
+    }
+
+    fin.ignore(1); // Skip the newline character after max_val
+
+    if (magic_number == "P5") {
+        // PGM (grayscale) format
+        m_n_channels = 1;
+        m_width = width;
+        m_height = height;
+        m_step = m_width * m_n_channels;
+
+        delete[] m_data;
+        size_t data_size;
+        if (!safe_multiply(m_step, m_height, data_size)) {
+            throw runtime_error("Error: Memory allocation size overflow!");
+        }
+        m_data = new (nothrow) uchar[data_size];
+        if (!m_data) {
+            throw runtime_error("Error: Memory allocation failed!");
+        }
+
+        fin.read(reinterpret_cast<char*>(m_data), data_size);
+    } else if (magic_number == "P6") {
+        // PPM (color) format
+        m_n_channels = 4;
+        m_width = width;
+        m_height = height;
+        m_step = m_width * m_n_channels;
+
+        delete[] m_data;
+        size_t data_size;
+        if (!safe_multiply(m_step, m_height, data_size)) {
+            throw runtime_error("Error: Memory allocation size overflow!");
+        }
+        m_data = new (nothrow) uchar[data_size];
+        if (!m_data) {
+            throw runtime_error("Error: Memory allocation failed!");
+        }
+
+        vector<uchar> rgb_data(m_width * m_height * 3);
+        fin.read(reinterpret_cast<char*>(rgb_data.data()), rgb_data.size());
+
+        for (int y = 0; y < m_height; ++y) {
+            for (int x = 0; x < m_width; ++x) {
+                m_data[(y * m_width + x) * 4 + 0] = rgb_data[(y * m_width + x) * 3 + 0];
+                m_data[(y * m_width + x) * 4 + 1] = rgb_data[(y * m_width + x) * 3 + 1];
+                m_data[(y * m_width + x) * 4 + 2] = rgb_data[(y * m_width + x) * 3 + 2];
+                m_data[(y * m_width + x) * 4 + 3] = 255;
+            }
+        }
+    }
+
+    fin.close();
 }
 
 }

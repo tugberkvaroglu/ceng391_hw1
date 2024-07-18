@@ -28,6 +28,7 @@ public:
     void set_rect_rgba(int x_tl, int y_tl, int width, int height, uchar r, uchar g, uchar b, uchar a = 255);
 
     void write_pnm(const std::string& filename) const;
+    void read_pnm(const std::string& filename);
 
 private:
     int m_n_channels;
