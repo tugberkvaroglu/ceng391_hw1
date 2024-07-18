@@ -155,4 +155,8 @@ CMakeFiles/image_test.dir/src/image.cpp.o: \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
  /usr/include/c++/11/bits/fstream.tcc /usr/include/c++/11/cstring \
  /usr/include/string.h /usr/include/strings.h \
- /usr/include/c++/11/iostream /usr/include/c++/11/limits
+ /usr/include/c++/11/iostream /usr/include/c++/11/limits \
+ /usr/include/c++/11/vector /usr/include/c++/11/bits/stl_uninitialized.h \
+ /usr/include/c++/11/bits/stl_vector.h \
+ /usr/include/c++/11/bits/stl_bvector.h \
+ /usr/include/c++/11/bits/vector.tcc
